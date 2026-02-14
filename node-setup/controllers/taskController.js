@@ -25,6 +25,10 @@ const updateTask = asyncHandler(async (req, res) => {
         throw new Error ('Task not found');
     }
     const update = await tasksCollections.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    if (!update) {
+        res.status(400);
+        throw new Error ('Task not Updated');
+    }
     res.status(200).json(update)
 });
 
@@ -34,10 +38,12 @@ const deleteTask = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error ('Task not found');
     }
-    await tasksCollections.findByIdAndDelete(req.params.id);
-    res.status(200).json({
-        id: req.params.id
-    })
+    const deleteTask = await tasksCollections.findByIdAndDelete(req.params.id);
+    if (!deleteTask) {
+        res.status(400);
+        throw new Error ('Task not Deleted');
+    }
+    res.status(200).json({id: deleteTask.id});
 });
 
 module.exports = {
