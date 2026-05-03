@@ -8,7 +8,10 @@ connectDB();
 
 const app = express();
 
-app.use(express.json());
+// read json data from body of request and pass to req.body in controller
+// without this middleware req.body will be undefined in controller and we will not able to read data from body of request
+app.use(express.json()); 
+
 app.use(express.urlencoded({extended: false}))
 
 app.use('/api/tasks', require('./routes/taskRoutes'));
